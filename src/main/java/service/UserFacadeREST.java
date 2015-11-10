@@ -62,14 +62,14 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
     @GET
     @Override
-    @Produces({"application/json"})
+    @Produces("application/json")
     public List<User> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
-    @Produces({"application/json"})
+    @Produces("application/json")
     public List<User> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
