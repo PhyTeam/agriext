@@ -29,6 +29,9 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(agriext.CrossOriginResourceSharingFilter.class);
+        resources.add(filter.NewJaxRsFilter.class);
+        resources.add(service.DemoRESTResource.class);
         resources.add(service.UserFacadeREST.class);
     }
     

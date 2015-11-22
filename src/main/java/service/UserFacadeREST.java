@@ -35,14 +35,14 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
     @POST
     @Override
-    @Consumes({"application/xml", "application/json"})
+    @Consumes("application/json")
     public void create(User entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
-    @Consumes({"application/xml", "application/json"})
+    @Consumes("application/json")
     public void edit(@PathParam("id") String id, User entity) {
         super.edit(entity);
     }
@@ -55,7 +55,7 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
     @GET
     @Path("{id}")
-    @Produces({"application/xml", "application/json"})
+    @Produces("application/json")
     public User find(@PathParam("id") String id) {
         return super.find(id);
     }
