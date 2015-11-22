@@ -34,7 +34,7 @@ public interface DemoRESTResourceProxy extends Serializable{
     );
     
     @GET
-    @Path("greeting")
+    @Path("hello")
     @Produces(MediaType.APPLICATION_JSON)
     public Response greeting();
 }
