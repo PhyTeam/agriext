@@ -7,7 +7,6 @@ package org.agriext.service.post;
 
 import java.util.List;
 import javax.ejb.Local;
-import javax.persistence.EntityManager;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,7 +15,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import org.agriext.business.PostBusiness;
 import org.agriext.data.Post;
 
 /**
@@ -51,9 +52,15 @@ public interface PostRESTProxy {
     @Path("{from}/{to}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Post> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to);
-
+    
     @GET
     @Path("count")
     @Produces("text/plain")
     public String countREST();
+    
+    
+    @GET
+    @Path("search")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Post> findByTitle(@QueryParam("type") String type, @QueryParam("keyword") String keyword);
 }

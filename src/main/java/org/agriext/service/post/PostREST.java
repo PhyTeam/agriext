@@ -11,8 +11,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import org.agriext.data.Post;
 import org.agriext.business.AbstractFacade;
+import org.agriext.business.PostBusiness;
 
 /**
  *
@@ -67,6 +69,14 @@ public class PostREST extends AbstractFacade<Post> implements  PostRESTProxy{
     @Override
     protected EntityManager getEntityManager() {
         return em;
+    }
+    
+    @Override
+    public List<Post> findByTitle(@QueryParam("type") String type, @QueryParam("keyword") String keyword){
+        System.out.println(keyword);
+        List<Post> ls = PostBusiness.getInstance().findByTitle(keyword);
+        System.out.println(ls);
+        return ls;
     }
     
 }

@@ -5,7 +5,13 @@
  */
 package org.agriext.business;
 
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.json.JsonObject;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import org.agriext.data.Post;
 
 /**
  *
@@ -14,7 +20,7 @@ import javax.json.JsonObject;
 public class PostBusiness {
     private static PostBusiness postBusiness;
     
-    public synchronized PostBusiness getInstance(){
+    public static synchronized PostBusiness getInstance(){
         if(postBusiness == null)
             postBusiness = new PostBusiness();
         
@@ -25,5 +31,19 @@ public class PostBusiness {
     
     public void create(JsonObject post){
         
+    }
+    
+    public List<Post> findByTitle(String keyword){
+        return lookupPostManagerBean().findByTitle(keyword);
+    }
+    
+    private org.agriext.data.PostManager lookupPostManagerBean() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (org.agriext.data.PostManager) c.lookup("java:global/agriextention-1.0/PostTableManager!org.agriext.data.PostManager");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
     }
 }

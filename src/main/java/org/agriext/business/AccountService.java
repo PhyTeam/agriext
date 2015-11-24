@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.DuplicateKeyException;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.security.auth.login.AccountLockedException;
@@ -22,15 +23,15 @@ import javax.security.auth.login.FailedLoginException;
  *
  * @author Phuc
  */
-public final class Authenticator {
+public final class AccountService {
     NewSessionBean newSessionBean = lookupNewSessionBeanBean();
-    protected static Authenticator authenticator = null;
+    protected static AccountService authenticator = null;
     
     private final Map<String, String> userStorage = new HashMap<>();
     
     private final Map<String,String> autherizationStorage = new HashMap<>();
 
-    public Authenticator() {
+    public AccountService() {
         userStorage.put("Phuc", "123456789");
     }
     
@@ -77,9 +78,25 @@ public final class Authenticator {
         throw new GeneralSecurityException();
     }
     
-    public static synchronized Authenticator getInstance(){
+    /**
+     * Create new user
+     * @param account
+     * @throws DuplicateKeyException 
+     */
+    public void signup(User account) throws DuplicateKeyException{
+        NewSessionBean accountManager = lookupNewSessionBeanBean();
+        User userMatch = accountManager.find(account.getUsername());
+        if(userMatch != null){
+            throw new DuplicateKeyException("Duplicate key.");
+        } else {
+            accountManager.create(account);
+        }
+        
+    }
+    
+    public static synchronized AccountService getInstance(){
         if(authenticator == null){
-            authenticator = new Authenticator();
+            authenticator = new AccountService();
         }
         return authenticator;
     }
@@ -87,7 +104,7 @@ public final class Authenticator {
     private NewSessionBean lookupNewSessionBeanBean() {
         try {
             javax.naming.Context c = new InitialContext();
-            return (NewSessionBean) c.lookup("java:global/agriextention-1.0/UserTableManager!data.NewSessionBean");
+            return (NewSessionBean) c.lookup("java:global/agriextention-1.0/UserTableManager!org.agriext.data.NewSessionBean");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

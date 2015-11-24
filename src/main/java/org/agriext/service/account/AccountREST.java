@@ -6,13 +6,14 @@
 package org.agriext.service.account;
 
 import org.agriext.service.account.AccountRESTProxy;
-import org.agriext.business.Authenticator;
+import org.agriext.business.AccountService;
 import org.agriext.data.User;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.security.GeneralSecurityException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.DuplicateKeyException;
 import javax.ejb.Stateless;
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -47,7 +48,7 @@ public class AccountREST implements AccountRESTProxy{
     @Override
     public Response login(HttpHeaders httpHeaders, String username, String password) {
         System.out.println(username + "\n");
-        Authenticator authenticator = Authenticator.getInstance();
+        AccountService authenticator = AccountService.getInstance();
         try {
             String authToken = authenticator.login(username, password);
             JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
@@ -94,7 +95,7 @@ public class AccountREST implements AccountRESTProxy{
 
     @Override
     public Response logout(HttpHeaders httpHeaders, String authToken) {
-        Authenticator authenticator = Authenticator.getInstance();
+        AccountService authenticator = AccountService.getInstance();
         System.out.println(authToken);
         try {
             authenticator.logout(authToken);
@@ -108,9 +109,9 @@ public class AccountREST implements AccountRESTProxy{
     @Override
     public Response signup(User input) {
         try{
-            getEntityManager().persist(input);
+            AccountService.getInstance().signup(input);
             return Response.status(Response.Status.CREATED).build();
-        } catch(EntityExistsException entityExistsException){
+        } catch(DuplicateKeyException e){
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         }
     }

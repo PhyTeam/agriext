@@ -5,36 +5,38 @@
  */
 package org.agriext.data;
 
-import javax.ejb.Stateful;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 
 /**
  *
  * @author Phuc
  */
-@Stateless(name = "UserTableManager",mappedName = "UserTableManager")
-public class NewSessionBean extends GenericTable<User>{
+@Stateless(name = "PostTableManager",mappedName = "PostTableManager")    
+public class PostManager extends GenericTable<Post>{
+    
     @PersistenceContext(unitName = "agriextention_agriextention_war_1.0PU")
     private EntityManager em;
 
-    public NewSessionBean() {
-        super(User.class);
-        //init();
+    public PostManager() {
+        super(Post.class);
     }
-    
-    public NewSessionBean(Class<User> entityClass) {
+
+    public PostManager(Class<Post> entityClass) {
         super(entityClass);
-        //init();
     }
     
     @Override
     protected EntityManager getEntityManager() {
-        System.out.println("TEST : " + em);
         return em;
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public List<Post> findByTitle(String keyword){
+        return em.createQuery("SELECT a FROM Post a WHERE a.title LIKE :keyword").setParameter("keyword", "%" + keyword + "%").getResultList();
+        
     }
     
 }
