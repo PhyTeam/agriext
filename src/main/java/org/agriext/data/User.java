@@ -3,23 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package data;
+package org.agriext.data;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -40,6 +44,18 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "User.findByAvatar", query = "SELECT u FROM User u WHERE u.avatar = :avatar"),
     @NamedQuery(name = "User.findByAddress", query = "SELECT u FROM User u WHERE u.address = :address")})
 public class User implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
+    private Collection<Answer> answerCollection;
+    @OneToMany(mappedBy = "creator")
+    private Collection<Post> postCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
+    private Collection<Question> questionCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
+    private Collection<Survey> surveyCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
+    private Collection<Surveyresponse> surveyresponseCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "creator")
+    private Collection<Advertise> advertiseCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -198,6 +214,60 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "data.User[ username=" + username + " ]";
+    }
+
+    @XmlTransient
+    public Collection<Answer> getAnswerCollection() {
+        return answerCollection;
+    }
+
+    public void setAnswerCollection(Collection<Answer> answerCollection) {
+        this.answerCollection = answerCollection;
+    }
+
+    @XmlTransient
+    public Collection<Post> getPostCollection() {
+        return postCollection;
+    }
+
+    public void setPostCollection(Collection<Post> postCollection) {
+        this.postCollection = postCollection;
+    }
+
+    @XmlTransient
+    public Collection<Question> getQuestionCollection() {
+        return questionCollection;
+    }
+
+    public void setQuestionCollection(Collection<Question> questionCollection) {
+        this.questionCollection = questionCollection;
+    }
+
+    @XmlTransient
+    public Collection<Survey> getSurveyCollection() {
+        return surveyCollection;
+    }
+
+    public void setSurveyCollection(Collection<Survey> surveyCollection) {
+        this.surveyCollection = surveyCollection;
+    }
+
+    @XmlTransient
+    public Collection<Surveyresponse> getSurveyresponseCollection() {
+        return surveyresponseCollection;
+    }
+
+    public void setSurveyresponseCollection(Collection<Surveyresponse> surveyresponseCollection) {
+        this.surveyresponseCollection = surveyresponseCollection;
+    }
+
+    @XmlTransient
+    public Collection<Advertise> getAdvertiseCollection() {
+        return advertiseCollection;
+    }
+
+    public void setAdvertiseCollection(Collection<Advertise> advertiseCollection) {
+        this.advertiseCollection = advertiseCollection;
     }
     
 }

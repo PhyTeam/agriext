@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package service;
+package org.agriext.service;
 
 import java.util.Set;
 import javax.ws.rs.core.Application;
@@ -29,10 +29,16 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(agriext.CrossOriginResourceSharingFilter.class);
-        resources.add(filter.NewJaxRsFilter.class);
-        resources.add(service.DemoRESTResource.class);
-        resources.add(service.UserFacadeREST.class);
+        resources.add(org.agriext.service.UserFacadeREST.class);
+        resources.add(org.agriext.service.account.AccountREST.class);
+        resources.add(org.agriext.service.filter.CrossOriginResourceSharingFilter.class);
+        // Account proxy
+        resources.add(org.agriext.service.filter.NewJaxRsFilter.class);
+        // Plant proxy
+        resources.add(org.agriext.service.plant.KindFacadeREST.class);
+        resources.add(org.agriext.service.plant.PlantFacadeREST.class);
+        // Post REST proxy
+        resources.add(org.agriext.service.post.PostREST.class);
     }
     
 }

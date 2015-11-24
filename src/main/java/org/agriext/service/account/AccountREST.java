@@ -3,15 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package service;
+package org.agriext.service.account;
 
-import business.Authenticator;
+import org.agriext.service.account.AccountRESTProxy;
+import org.agriext.business.Authenticator;
+import org.agriext.data.User;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.security.GeneralSecurityException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.security.auth.login.AccountLockedException;
+import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.CacheControl;
@@ -23,9 +34,16 @@ import javax.ws.rs.core.Response;
  * @author Phuc
  */
 @Stateless
-@Path("business")
-public class DemoRESTResource implements DemoRESTResourceProxy{
-
+@Path("account")
+public class AccountREST implements AccountRESTProxy{
+    
+    @PersistenceContext(unitName = "agriextention_agriextention_war_1.0PU")
+    private EntityManager em;
+    
+    public EntityManager getEntityManager(){
+        return em;
+    }
+    
     @Override
     public Response login(HttpHeaders httpHeaders, String username, String password) {
         System.out.println(username + "\n");
@@ -37,12 +55,17 @@ public class DemoRESTResource implements DemoRESTResourceProxy{
             JsonObject jsonObject = jsonObjectBuilder.build();
             
             return getNoCacheResponseBuilder(Response.Status.OK).entity(jsonObject.toString()).build();
-        } catch (LoginException ex) {
+        }
+        catch(AccountLockedException ex){
+            return getNoCacheResponseBuilder(Response.Status.NOT_ACCEPTABLE).build();
+        }
+        catch (FailedLoginException ex) {
+            System.out.println(ex);
             JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
             jsonObjectBuilder.add("error", "Some thing wrong");
             JsonObject jsonObject = jsonObjectBuilder.build();
             return getNoCacheResponseBuilder(Response.Status.UNAUTHORIZED).entity(jsonObject.toString()).build();
-            //Logger.getLogger(DemoRESTResource.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(AccountREST.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
    
@@ -67,5 +90,28 @@ public class DemoRESTResource implements DemoRESTResourceProxy{
         JsonObject ret = builder.build();
         return Response.ok(ret).build();
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Response logout(HttpHeaders httpHeaders, String authToken) {
+        Authenticator authenticator = Authenticator.getInstance();
+        System.out.println(authToken);
+        try {
+            authenticator.logout(authToken);
+            return getNoCacheResponseBuilder(Response.Status.OK).build();
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        } catch (GeneralSecurityException ex) {
+            return getNoCacheResponseBuilder(Response.Status.NOT_FOUND).build();
+        }
+    }
+
+    @Override
+    public Response signup(User input) {
+        try{
+            getEntityManager().persist(input);
+            return Response.status(Response.Status.CREATED).build();
+        } catch(EntityExistsException entityExistsException){
+            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+        }
     }
 }

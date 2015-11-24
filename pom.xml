@@ -27,6 +27,15 @@
             <version>SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+<!--        
+        <dependency>
+            <groupId>agriextention</groupId>
+            <artifactId>agriextention</artifactId>
+            <version>1.0</version>
+           <scope>provided</scope>
+           
+        </dependency>
+-->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>

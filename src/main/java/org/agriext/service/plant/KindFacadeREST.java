@@ -3,9 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package service;
+package org.agriext.service.plant;
 
-import data.User;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -18,32 +17,34 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import org.agriext.business.AbstractFacade;
+import org.agriext.data.Kind;
 
 /**
  *
  * @author Phuc
  */
 @Stateless
-@Path("data.user")
-public class UserFacadeREST extends AbstractFacade<User> {
+@Path("plant.kind")
+public class KindFacadeREST extends AbstractFacade<Kind> {
     @PersistenceContext(unitName = "agriextention_agriextention_war_1.0PU")
     private EntityManager em;
 
-    public UserFacadeREST() {
-        super(User.class);
+    public KindFacadeREST() {
+        super(Kind.class);
     }
 
     @POST
     @Override
-    @Consumes("application/json")
-    public void create(User entity) {
+    @Consumes({"application/xml", "application/json"})
+    public void create(Kind entity) {
         super.create(entity);
     }
 
     @PUT
     @Path("{id}")
-    @Consumes("application/json")
-    public void edit(@PathParam("id") String id, User entity) {
+    @Consumes({"application/xml", "application/json"})
+    public void edit(@PathParam("id") String id, Kind entity) {
         super.edit(entity);
     }
 
@@ -55,22 +56,22 @@ public class UserFacadeREST extends AbstractFacade<User> {
 
     @GET
     @Path("{id}")
-    @Produces("application/json")
-    public User find(@PathParam("id") String id) {
+    @Produces({"application/xml", "application/json"})
+    public Kind find(@PathParam("id") String id) {
         return super.find(id);
     }
 
     @GET
     @Override
-    @Produces("application/json")
-    public List<User> findAll() {
+    @Produces({"application/xml", "application/json"})
+    public List<Kind> findAll() {
         return super.findAll();
     }
 
     @GET
     @Path("{from}/{to}")
-    @Produces("application/json")
-    public List<User> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
+    @Produces({"application/xml", "application/json"})
+    public List<Kind> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 
