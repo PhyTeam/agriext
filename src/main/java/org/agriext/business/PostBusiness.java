@@ -36,6 +36,16 @@ public class PostBusiness {
     public List<Post> findByTitle(String keyword){
         return lookupPostManagerBean().findByTitle(keyword);
     }
+    /**
+     * Return top new post
+     * @param type { "PO" => Ki thuat sx , "MO" => Mo hinh }
+     * @param number
+     * @return 
+     */
+    public List<Post> findNew(String type, int number){
+        return lookupPostManagerBean().findTopNew(type, number);
+    }
+    
     
     private org.agriext.data.PostManager lookupPostManagerBean() {
         try {

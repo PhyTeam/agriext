@@ -26,58 +26,48 @@ import org.agriext.data.Kind;
  */
 @Stateless
 @Path("plant.kind")
-public class KindFacadeREST extends AbstractFacade<Kind> {
+public class KindREST extends AbstractFacade<Kind> implements  KindRESTProxy{
     @PersistenceContext(unitName = "agriextention_agriextention_war_1.0PU")
     private EntityManager em;
 
-    public KindFacadeREST() {
+    public KindREST() {
         super(Kind.class);
     }
 
-    @POST
+
     @Override
-    @Consumes({"application/xml", "application/json"})
     public void create(Kind entity) {
         super.create(entity);
     }
 
-    @PUT
-    @Path("{id}")
-    @Consumes({"application/xml", "application/json"})
+    @Override
     public void edit(@PathParam("id") String id, Kind entity) {
         super.edit(entity);
     }
 
-    @DELETE
-    @Path("{id}")
+    @Override
     public void remove(@PathParam("id") String id) {
         super.remove(super.find(id));
     }
 
-    @GET
-    @Path("{id}")
-    @Produces({"application/xml", "application/json"})
+    @Override
     public Kind find(@PathParam("id") String id) {
         return super.find(id);
     }
 
-    @GET
     @Override
-    @Produces({"application/xml", "application/json"})
     public List<Kind> findAll() {
         return super.findAll();
     }
 
-    @GET
-    @Path("{from}/{to}")
-    @Produces({"application/xml", "application/json"})
+
+    @Override
     public List<Kind> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to) {
         return super.findRange(new int[]{from, to});
     }
 
-    @GET
-    @Path("count")
-    @Produces("text/plain")
+
+    @Override
     public String countREST() {
         return String.valueOf(super.count());
     }

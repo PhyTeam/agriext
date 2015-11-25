@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.agriext.service.post;
+package org.agriext.service.plant;
 
 import java.util.List;
-import javax.ejb.Local;
+import javax.annotation.security.RolesAllowed;
+import javax.persistence.EntityManager;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -15,62 +16,46 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import org.agriext.business.PostBusiness;
-import org.agriext.data.Post;
+import org.agriext.data.Kind;
 
 /**
  *
  * @author Phuc
  */
-@Local
-public interface PostRESTProxy {
+public interface KindRESTProxy {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void create(Post entity);
+    public void create(Kind entity);
 
     @PUT
     @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void edit(@PathParam("id") String id, Post entity);
+    public void edit(@PathParam("id") String id, Kind entity);
 
     @DELETE
     @Path("{id}")
+    @RolesAllowed("chuyengia")
     public void remove(@PathParam("id") String id);
-
+    
+    
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Post find(@PathParam("id") String id);
+    public Kind find(@PathParam("id") String id);
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Post> findAll();
+    public List<Kind> findAll();
 
     @GET
     @Path("{from}/{to}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Post> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to);
-    
+    public List<Kind> findRange(@PathParam("from") Integer from, @PathParam("to") Integer to);
+
     @GET
     @Path("count")
     @Produces("text/plain")
     public String countREST();
-    
-    @GET
-    @Path("model")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Post> findTopModel(@QueryParam("c") int c);
-    
-    @GET
-    @Path("tech")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Post> findTopTech(@QueryParam("c") int c);
-    
-    
-    @GET
-    @Path("search")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Post> findByTitle(@QueryParam("type") String type, @QueryParam("keyword") String keyword);
+
 }

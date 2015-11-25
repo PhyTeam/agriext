@@ -17,7 +17,10 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,6 +31,10 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  * @author Phuc
  */
+@NamedStoredProcedureQuery(name = "rand_plant", procedureName = "rand_plant",
+        parameters = {@StoredProcedureParameter(mode = ParameterMode.IN, name = "lm", type = Integer.class)},
+        resultClasses = Plant.class)
+
 @Entity
 @Table(name = "plant")
 @XmlRootElement
@@ -58,8 +65,8 @@ public class Plant implements Serializable {
     private String avatar;
     @Lob
     @Size(max = 65535)
-    @Column(name = "character")
-    private String character;
+    @Column(name = "desc")
+    private String desc;
     @JoinColumn(name = "CodeKind", referencedColumnName = "codeKind")
     @ManyToOne(optional = false)
     private Kind codeKind;
@@ -110,12 +117,12 @@ public class Plant implements Serializable {
         this.avatar = avatar;
     }
 
-    public String getCharacter() {
-        return character;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setCharacter(String character) {
-        this.character = character;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     public Kind getCodeKind() {

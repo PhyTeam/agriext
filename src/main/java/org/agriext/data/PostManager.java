@@ -36,7 +36,11 @@ public class PostManager extends GenericTable<Post>{
     
     public List<Post> findByTitle(String keyword){
         return em.createQuery("SELECT a FROM Post a WHERE a.title LIKE :keyword").setParameter("keyword", "%" + keyword + "%").getResultList();
-        
     }
     
+    public List<Post> findTopNew(String type,int number){
+        return em.createQuery("SELECT a FROM Post a WHERE a.codePost LIKE :param ORDER BY A.time")
+                .setParameter("param", type + "%")
+                .setMaxResults(number).getResultList();
+    }
 }

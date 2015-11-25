@@ -78,5 +78,16 @@ public class PostREST extends AbstractFacade<Post> implements  PostRESTProxy{
         System.out.println(ls);
         return ls;
     }
+
+    @Override
+    public List<Post> findTopModel(int c) {
+        return PostBusiness.getInstance().findNew("MO", c);
+    }
+
+    @Override
+    public List<Post> findTopTech(int c) {
+        return PostBusiness.getInstance().findNew("PO", c);
+    }
+    
     
 }

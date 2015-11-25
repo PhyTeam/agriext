@@ -35,8 +35,8 @@ public class ApplicationConfig extends Application {
         // Account proxy
         resources.add(org.agriext.service.filter.NewJaxRsFilter.class);
         // Plant proxy
-        resources.add(org.agriext.service.plant.KindFacadeREST.class);
-        resources.add(org.agriext.service.plant.PlantFacadeREST.class);
+        resources.add(org.agriext.service.plant.KindREST.class);
+        resources.add(org.agriext.service.plant.PlantREST.class);
         // Post REST proxy
         resources.add(org.agriext.service.post.PostREST.class);
     }
