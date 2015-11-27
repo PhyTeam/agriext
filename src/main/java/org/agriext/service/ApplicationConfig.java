@@ -39,6 +39,8 @@ public class ApplicationConfig extends Application {
         resources.add(org.agriext.service.plant.PlantREST.class);
         // Post REST proxy
         resources.add(org.agriext.service.post.PostREST.class);
+        resources.add(org.agriext.service.qa.AnswerFacadeREST.class);
+        resources.add(org.agriext.service.qa.QuestionFacadeREST.class);
     }
     
 }
